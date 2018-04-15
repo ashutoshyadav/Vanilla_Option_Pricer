@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>Vanila Option Pricer</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link href="https://fonts.googleapis.com/css?family=Berkshire+Swash" rel="stylesheet">
+		<style>
+			body{
+				margin-left: 20%;
+				margin-right: 20%;
+				color: white;
+				background-color: tan;
+				background-image: url('https://www.altran.com/as-content/uploads/sites/7/2017/05/5-0_finance_1600.jpg')
+			}
+			h1{
+				text-align: center;
+				font-family: 'Berkshire Swash', cursive;
+			}
+			h5{
+				float: right;
+				margin-right: 5%;
+				font-family: 'Berkshire Swash', cursive;
+			}
+			table,tr,td{
+				font-family: 'Berkshire Swash', cursive;
+				padding: 30px;
+				font-size: 20px;
+				text-align: center;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Welcome to Vanila Option Pricer</h1>
+		<h5>By Ashutosh Yadav</h5>
+		<br><br>
+		<form>
+			<div class="form-group bg1">
+				<input type="text" name="spot" id='spot' class="form-control" placeholder="Spot Price">
+				<br>
+				<input type="text" name="strike" id='strike' class="form-control" placeholder="Strike Price">
+				<br>
+				<input type="text" name="vol" id='vol' class="form-control" placeholder="Volatility">
+				<br>
+				<input type="text" name="rate" id='rate' class="form-control" placeholder="Rate"><br>
+				Maturity Date: <input type="date" id='md' class="form-control" name="maturity">
+				<br>
+				Strike Date: <input type="date" id='sd' class="form-control" name="strike-date"><br>
+				<div class="form-group">
+					Option type: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio"  name="type" value="call">Call
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<input type="radio" name="type"  value="put">Put
+				</div>
+				<br>
+				<input type="button" id='submitButton' class="btn btn-primary" value="Calculate">
+				<input type="reset" class="btn btn-info" value="Reset">
+			</div>
+		</form> 
+ 
+		<div class="card-body" id='result' style="background-color: red,border:10px black">
+			&nbsp;
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			$('#submitButton').click(function(){
+				var spot = $('#spot').val();
+				var strike = $('#strike').val();
+				var vol = $('#vol').val();
+				var rate = $('#rate').val();
+				var md = $('#md').val();
+				var sd = $('#sd').val();
+				var type = $('input[name=type]:checked').val();
+				var temp;
+				var data = {
+					spot : spot,
+					strike: strike,
+					vol: vol,
+					rate : rate,
+					type : type,
+					maturity : md,
+					'strike-date': sd
+				};
+				$.ajax({
+					type : 'post',
+					url : '/vop/',
+					dataType:'json',
+					data : data,
+					success: function(result){
+						var text = '<table><tr><th>Option </th><th> Premium</th><th>Delta </th><th> Gamma </th><th> Vega </th><th> Theta</th></tr>'
+						text += '<tr><td>'+String(result.type)+'</td><td>'+String(result.price)+'</td><td>'+String(result.delta)+'</td><td>'+String(result.gamma)+'</td><td>'+String(result.vega)+'</td><td>'+String(result.theta)+'</td></tr></table>'
+
+						// alert(text);
+						$('#result').html(text);
+
+					}
+				});
+			})
+		</script>
+	</body>
+</html>
