@@ -1,0 +1,168 @@
+swagger: "2.0"
+info:
+  description: "This is a simple API for `Pricing Vanilla` Options using `Black-Scholes Formula`. It currently supports `PUT` Method and Web based `POST` method for getting the Price, Gamma, Delta, Vega and Theta for Vanilla Price Options. The PUT method takes the input in `JSON` format and returns the result in same format.
+  "
+  version: "1.0.0"
+  title: "Vanilla Option Pricer "
+  contact:
+    email: "ashutoshy.and0@gmail.com"
+  
+basePath: "/vop/"
+tags:
+- name: "VOP"
+  description: "Pricing Vanilla Options"
+  externalDocs:
+    description: "Find out more"
+    url: "http://github.com/ashutoshyadav/"
+schemes:
+- "http"
+paths:
+  /VOP:
+    get:
+      tags:
+      - "VOP"
+      summary: ""
+      description: "Renders the HTML template for making a `POST` Request from browser"
+      operationId: "getRequest"
+      produces:
+      - "HTML"
+      responses:
+        404:
+          description: "Not found"
+        200:
+          description: "successful operation"
+  
+    post:
+      tags:
+      - "VOP"
+      summary: ""
+      description: "Get Price and other Greeks for Vanilla Price Options using Black-Scholes Formula"
+      operationId: "postRequest"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Option Oject whose Price needs to be calculated"
+        required: true
+        schema:
+          $ref: "#/definitions/Input"
+      responses:
+        405:
+          description: "Invalid input"
+        404:
+          description: "Not found"
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/Output"
+    put:
+      tags:
+      - "VOP"
+      summary: ""
+      description: "Get Price and other Greeks for Vanilla Price Options using Black-Scholes Formula"
+      operationId: "putRequest"
+      consumes:
+      - "json"
+      produces:
+      - "json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Option data in `JSON` format whose Price needs to be calculated"
+        required: true
+        schema:
+          $ref: "#/definitions/Input"
+      responses:
+        405:
+          description: "Invalid input"
+        404:
+          description: "Not found"
+        200:
+          description: "successful operation"
+          schema:
+            type: "array"
+            items:
+              $ref: "#/definitions/ApiResponse"
+
+definitions:
+  Input:
+    type: "object"
+    properties:
+      spot:
+        type: "number"
+        format: "float"
+      strike:
+        type: "number"
+        format: "float"
+      vol:
+        type: "number"
+        format: "float"
+      rate:
+        type: "number"
+        format: "float"
+      strike-date:
+        type: "string"
+        description: "date-time"
+      type:
+        type: "string"
+      maturity-date:
+        type: "string"
+        description: "date-time"
+      
+    xml:
+      name: "input"
+  Output:
+    type: "object"
+    properties:
+      price:
+        type: "number"
+        format: "float"
+      delta:
+        type: "number"
+        format: "float"
+      gamma:
+        type: "number"
+        format: "float"
+      vega:
+        type: "number"
+        format: "float"
+      theta:
+        type: "number"
+        format: "float"
+      name:
+        type: "string"
+    xml:
+      name: "Output"
+  
+  ApiResponse:
+    type: "object"
+    properties:
+      price:
+        type: "number"
+        format: "float"
+      delta:
+        type: "number"
+        format: "float"
+      gamma:
+        type: "number"
+        format: "float"
+      vega:
+        type: "number"
+        format: "float"
+      theta:
+        type: "number"
+        format: "float"
+      name:
+        type: "string"
+      message:
+        type: "string"
+    xml:
+      name: "ApiResponse"
+externalDocs:
+  description: "Find out more about Developer"
+  url: "https://www.linkedin.com/in/ashutoshyadaviitkgp/"
